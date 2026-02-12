@@ -6,9 +6,9 @@ public class Hand {
     int cards[] = new int[5];
     //this is decorative just to keep track of labels' indexs on labelFreq
     //{2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace};
-    int labelFreq[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int ranking = 1;
-    int bidValue;
+     int labelFreq[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+     int ranking = 1;
+     int bidValue;
     int handType;
 
     enum HandType{// custom enum class to make hand types more readable
@@ -56,8 +56,6 @@ public class Hand {
                 }
             }
         }
-
-        System.out.println(Arrays.toString(labelFreq));
     }
 
 
@@ -65,16 +63,15 @@ public class Hand {
         int maxFreqLabel = 0;
         int labelIndex = -1;
         for (int i = 0; i < labelFreq.length; i++){
-            if (labelFreq[i] >= maxFreqLabel && i != 11){
+            if (labelFreq[i] >= maxFreqLabel && i != 10){
                 maxFreqLabel = labelFreq[i];
                 labelIndex = i;
             }
         }
-        System.out.println(labelIndex); //DOESNT WORK, LABEL INDEX IS NOT PRINTED (DOESNT HAVE VALUE)????
+
         labelFreq[labelIndex] = labelFreq[labelIndex] + labelFreq[10];
         labelFreq[10] = 0;
 
-        System.out.println(Arrays.toString(labelFreq));
     }
     void evaluateHandType(){
         String frequencies = "";
@@ -132,6 +129,7 @@ public class Hand {
     }
 
     public void compareRank(Hand hand2){
+
         if (handType > hand2.handType){
             ranking++;
             //System.out.println("Greater");
@@ -141,6 +139,40 @@ public class Hand {
             //System.out.println("Tiebreaker");
             for (int card = 0; card < cards.length; card++){
                 //System.out.println(cards[card] + " vs " + hand2.cards[card]);
+                if (cards[card] > hand2.cards[card]){
+                    //System.out.println("Winner!");
+                    ranking++;
+                    return;
+                }
+                if (hand2.cards[card] > cards[card]){
+                    //System.out.println("Loser!");
+                    return;
+                }
+            }
+        }
+        //System.out.println("Not greater");
+    }
+
+    public void compareRankWildVers(Hand hand2){
+
+        if (handType > hand2.handType){
+            ranking++;
+            //System.out.println("Greater");
+            return;
+        }
+        else if (handType == hand2.handType){
+            //System.out.println("Tiebreaker");
+            for (int card = 0; card < cards.length; card++){
+                //System.out.println(cards[card] + " vs " + hand2.cards[card]);
+                if (cards[card] == 11 && hand2.cards[card] != 11){
+                    //System.out.println("Loser!");
+                    return;
+                }
+                if (cards[card] != 11 && hand2.cards[card] == 11){
+                    //System.out.println("Winner!");
+                    ranking++;
+                    return;
+                }
                 if (cards[card] > hand2.cards[card]){
                     //System.out.println("Winner!");
                     ranking++;
